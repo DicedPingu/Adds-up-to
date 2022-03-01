@@ -45,11 +45,9 @@ def multito(wanted_sums, cells, num_list=range(1, 10), display_results=True):
         break
     if right_sequence:
       solutions.append(i)
-      # print(f'{i} is a match.')
 
   if display_results:
     # print(f"{len(solutions)} solution{'s'*(len(solutions)!=1)} for {[wanted_sums[n] for n in range(nums)]}{':'*bool(solutions)}")
-    # print(f"{len(solutions)} solution{'s'*(len(solutions)!=1)} for {[wanted_sums[n] for n in range(nums)]} with {sum(cells)} digits")
     print(len(solutions), 'solution' + 's'*(len(solutions)!=1) + ' for', end=' ')
     print(*wanted_sums, end=' (', sep=', ')
     print(*cells, end=')\n', sep=', ')
