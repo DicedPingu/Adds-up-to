@@ -1,62 +1,66 @@
 from itertools import combinations, product
 
 
-def upto(wanted_sum, cells, num_list = False, must_include = False):
+def upto(wanted_sum, cells, num_list=range(1, 10), display_results=False):
   if not num_list:
     num_list = list(range(1, 10))
-  if not must_include:
-    must_include = []
-  
-  
+
   combs = combinations(num_list, cells)
   matches = []
   for c in combs:
-    includes = 0
-    for n in c:
-      if n in must_include:
-        includes += 1
-    
-    if sum(c) == wanted_sum and includes == len(must_include):
-      print(c, '=', sum(c))
+    if sum(c) == wanted_sum:
       matches.append(c)
-      
-  if not matches:
+      if display_results:
+        print(c, '=', sum(c))
+
+  if not matches and display_results:
     print('No matches for', wanted_sum)
   return matches
 
-def multito(wanted_sums, cells, num_list = False):
+def multito(wanted_sums, cells, num_list=range(1, 10), display_results=True):
+  nums = len(wanted_sums)
   sums = []
   lens = []
-  for i in range(len(wanted_sums)):
+  for i in range(nums):
     s = wanted_sums[i]
     c = cells[i]
     u = upto(s, c, num_list)
-    sums[i] = u
-    lens.append(len(wanted_sums))
-    
+    sums.append(u)
+    lens.append(len(u))
+
   if not num_list:
     num_list = range(1, 10)
-  
-  iters = product(lens)
-  for n in range(iters):
-    comb = []
-    #for k in sums:
-      
-    
-  
-  
-  
-  
 
-# upto(36, 7)
-# upto(16, 4, False, [2])
+  iters = product(*sums)
+  solutions = []
+  for i in iters:
+    digits = [s for n in i for s in n]
+    wants = [n for n in num_list]
+    right_sequence = True
+    for d in digits:
+      if d in wants:
+        wants.remove(d)
+      else:
+        right_sequence = False
+        break
+    if right_sequence:
+      solutions.append(i)
+      # print(f'{i} is a match.')
 
-want = 16
-nums = 3
-choices = range(want,nums)
+  if display_results:
+    # print(f"{len(solutions)} solution{'s'*(len(solutions)!=1)} for {[wanted_sums[n] for n in range(nums)]}{':'*bool(solutions)}")
+    # print(f"{len(solutions)} solution{'s'*(len(solutions)!=1)} for {[wanted_sums[n] for n in range(nums)]} with {sum(cells)} digits")
+    print(len(solutions), 'solution' + 's'*(len(solutions)!=1) + ' for', end=' ')
+    print(*wanted_sums, end=' (', sep=', ')
+    print(*cells, end=')\n', sep=', ')
 
-upto(17, 3, [1,4,5,7,8])
-# pto(want, nums, choices)
-# upto(17,3,choices)
-# multito([16, 22], [3, 3], [3,5,6,7,8,9])
-#multito([7,8,11,19], [2,2,2,3], [1,2,3,4,5,6,7,8,9])
+    for s in solutions:
+      for i in range(nums):
+        print(f"{wanted_sums[i]} = {s[i]}", end='   ')
+      print()
+    print()
+
+
+multito([21, 15, 9], [3, 3, 3])
+multito([6, 7], [2, 2])
+multito([6, 7], [2, 2], [1, 2, 3, 4, 5])
